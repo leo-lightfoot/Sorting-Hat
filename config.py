@@ -44,10 +44,11 @@ RENAME_TEMPLATE = "{date}_{category}_{basename}{ext}"
 DATE_FORMAT = "%Y-%m-%d"
 
 # If True, files are also moved into a folder structure under each source
-# directory: <source>/_Organized/<year>/<category>/<new_filename>
+# directory: <source>/_Organized/<category>/<year>/<month>/<new_filename>
 # If False, files are renamed in place (same folder, new filename only).
 ORGANIZE_INTO_FOLDERS = True
 ORGANIZED_SUBFOLDER = "_Organized"
+MONTH_FOLDER_FORMAT = "%B"  # e.g. "March"; use "%m" for "03", "%m-%B" for "03-March"
 
 # --- Phase 4: Face recognition ---
 # Folder containing 5-10 clear, varied photos of the person to find

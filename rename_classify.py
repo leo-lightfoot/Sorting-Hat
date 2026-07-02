@@ -88,12 +88,13 @@ def build_new_name(row, used_names_in_dir):
 
     if config.ORGANIZE_INTO_FOLDERS:
         year = dt.strftime("%Y") if dt else "Unknown"
+        month = dt.strftime(config.MONTH_FOLDER_FORMAT) if dt else "Unknown"
         # Organize relative to whichever configured source dir this file is under
         source_root = next(
             (s for s in config.SOURCE_DIRS if str(src_path).startswith(str(Path(s)))),
             str(src_path.parent),
         )
-        target_dir = Path(source_root) / config.ORGANIZED_SUBFOLDER / category / year
+        target_dir = Path(source_root) / config.ORGANIZED_SUBFOLDER / category / year / month
     else:
         target_dir = src_path.parent
 

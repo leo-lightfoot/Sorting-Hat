@@ -81,12 +81,14 @@ search) keep working correctly.
 **Folder organization: ON by default now.** `ORGANIZE_INTO_FOLDERS = True` in
 `config.py`, so applying the rename also sorts files by category into:
 ```
-<source>/_Organized/Photo/<year>/2024-03-14_Photo_IMG_0234.jpg
-<source>/_Organized/Video/<year>/...
-<source>/_Organized/Document/<year>/...
-<source>/_Organized/Audio/<year>/...
+<source>/_Organized/Photo/<year>/<month>/2024-03-14_Photo_IMG_0234.jpg
+<source>/_Organized/Video/<year>/<month>/...
+<source>/_Organized/Document/<year>/<month>/...
+<source>/_Organized/Audio/<year>/<month>/...
 ```
-Category is the top-level folder, year is a sub-folder underneath it.
+Category is the top-level folder, year and then month are sub-folders
+underneath it. Month folder name format is set by `MONTH_FOLDER_FORMAT` in
+`config.py` (default `"%B"`, e.g. `March`).
 
 **Safe to re-run:** if you run the dry run again on already-renamed files,
 it correctly reports "already correctly named" instead of stacking a second
@@ -101,6 +103,34 @@ used to live in (e.g. `Camera`, `Screenshots`) will still exist but be empty,
 since files are moved out of them into `_Organized/`. These aren't cleaned
 up automatically — delete them manually once you've confirmed everything
 moved correctly.
+
+## Phase 3b: Custom folder rename (`rename_folder.py`)
+
+For relabeling the contents of one specific folder (e.g. a month folder full
+of trip photos) with your own naming pattern instead of the Phase 3
+date/category convention. Same dry-run → review → apply workflow.
+
+**Step 1 — dry run:**
+```
+python rename_folder.py "C:\path\to\folder" "Trip_{seq}{ext}"
+```
+Writes `reports/rename_folder_preview.csv`. **No files are touched.**
+`{seq}` is a sequence number (zero-padded, e.g. `001`, `002`, ...), assigned
+in alphabetical order of the current filenames — it's required in the
+pattern so every file gets a unique name. `{ext}` is the original file
+extension (with dot, lowercased). No other placeholders are supported.
+
+**Step 2 — review the CSV**, same as Phase 3: open it, check the names,
+flip `apply` to `NO` on any row you want to skip.
+
+**Step 3 — apply:**
+```
+python rename_folder.py --apply
+```
+Only files directly inside the given folder are touched (not subfolders).
+`inventory.db` is updated for any renamed file that was already tracked
+there; files not previously scanned are still renamed on disk, with a note
+printed at the end.
 
 ## Phase 4: Face recognition ("find me in these photos")
 

@@ -1,0 +1,16 @@
+# Python bytecode / cache
+__pycache__/
+*.pyc
+
+# Generated database - rebuild with scan_inventory.py
+inventory.db
+
+# Generated report exports - rebuild with the phase scripts
+reports/
+
+# Personal reference photos and derived face-embedding data
+reference_photos/
+reference_embeddings.json
+
+# Excel lock files
+~$*.xlsx
