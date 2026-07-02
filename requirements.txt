@@ -1,3 +1,7 @@
 pandas
 openpyxl
 Pillow
+insightface
+onnxruntime
+opencv-python
+numpy

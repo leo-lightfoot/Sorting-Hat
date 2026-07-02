@@ -11,9 +11,10 @@ Usage:
     python scan_inventory.py
 """
 import hashlib
+import json as jsonlib
 import os
 import sqlite3
-import sys
+import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
@@ -26,9 +27,6 @@ try:
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
-
-import subprocess
-import json as jsonlib
 
 
 SCHEMA = """
@@ -138,7 +136,7 @@ def extract_video_metadata(path):
             if w and h:
                 resolution = f"{w}x{h}"
         return duration, codec, resolution
-    except (FileNotFoundError, subprocess.TimeoutExpired, Exception):
+    except Exception:
         return None, None, None
 
 
@@ -182,7 +180,6 @@ def scan():
 
                 modified_iso = datetime.fromtimestamp(st.st_mtime).isoformat()
 
-                # Incremental skip: unchanged file already in DB
                 cur.execute("SELECT modified FROM files WHERE path=?", (str(fpath),))
                 row = cur.fetchone()
                 if row and row[0] == modified_iso:
